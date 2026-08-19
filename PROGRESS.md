@@ -2,11 +2,27 @@
 
 **Lesson 01 COMPLETE — 39/39 tests, 95/100 (A).** See GRADEBOOK.md for notes.
 
-## Next: lesson 02 — strings & regex
+## Next: lesson 02 — strings & regex (ready, 0/56)
 
-Not written yet. Ask me to generate it: NOTES.md + exercises.py stubs +
-test_lesson02.py, same shape as lesson 01, SRE angle (messy text munging,
-extracting fields out of half-structured log lines).
+Scenario: nginx access logs, messy text, and secrets that mustn't leak.
+
+```
+cd ~/git/python-brushup
+uv run --project lesson02 pytest lesson02 -q            # all 56
+uv run --project lesson02 pytest lesson02 -q -k ExtractIps
+```
+
+Read `lesson02/NOTES.md` first. Seven functions, in the order they build:
+
+| Function | Idea |
+|---|---|
+| `normalize_ws` | `re.sub(r"\s+", " ", s)` then strip — warm-up |
+| `parse_duration` | `fullmatch` to validate, `findall` with 2 groups to extract, `UNITS` to sum |
+| `extract_ips` | loose regex finds candidates, **Python** checks 0-255 — don't put the range in the pattern |
+| `parse_nginx_line` | named groups `(?P<x>...)` + `.groupdict()`; the centrepiece, do it before the last two |
+| `redact_secrets` | alternation from `SECRET_KEYS`, `\1` backreference, `re.IGNORECASE` |
+| `status_class_counts` | reuses the parser; `f"{status // 100}xx"` |
+| `top_paths` | reuses the parser; `Counter`, then the `(-count, path)` sort from lesson 01 |
 
 ## Optional cleanup on lesson 01
 
